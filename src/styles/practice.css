@@ -2,37 +2,6 @@
    Latihan menulis: kotak kertas, animasi goresan, panel info
    ========================================================================== */
 
-.placeholder {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-3);
-  padding: clamp(24px, 5vw, 44px);
-}
-
-.placeholder__mark {
-  font-family: var(--jp);
-  font-size: 40px;
-  line-height: 1;
-  color: var(--accent);
-}
-
-.placeholder h1 {
-  font-size: clamp(22px, 4vw, 30px);
-}
-
-.placeholder p {
-  color: var(--ink2);
-  max-width: 52ch;
-  text-wrap: pretty;
-}
-
-.placeholder__note {
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink2);
-}
-
 /* ---------- Tata letak halaman latihan ---------- */
 
 .practice {

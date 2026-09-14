@@ -1,0 +1,240 @@
+/* ==========================================================================
+   Hafalan: kartu huruf yang dibuka dengan sekali ketuk
+   ========================================================================== */
+
+.memo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+}
+
+.memo__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3);
+}
+
+.memo__shuffle {
+  margin-left: auto;
+}
+
+.memo__rows {
+  display: flex;
+  gap: var(--s-2);
+  overflow-x: auto;
+  padding-bottom: var(--s-1);
+}
+
+.memo__row-chip {
+  flex: none;
+  min-height: 44px;
+  padding: 0 var(--s-5);
+  border-radius: var(--r-md);
+  font-size: 13px;
+  color: var(--ink2);
+}
+
+.memo__row-chip[aria-selected='true'] {
+  border-color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 12%, transparent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.memo__stage {
+  display: grid;
+  place-items: center;
+}
+
+.memo__card {
+  width: min(100%, min(56vh, 480px));
+  aspect-ratio: 1;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  box-shadow: var(--shadow);
+}
+
+.memo__card:hover {
+  border-color: var(--accent);
+}
+
+.memo__glyph {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--jp);
+  font-size: 56cqmin;
+  line-height: 1;
+  color: var(--sumi);
+  transition: transform 0.3s ease;
+}
+
+.memo__glyph[data-revealed] {
+  transform: translateY(-8%);
+}
+
+.memo__romaji {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 10%;
+  text-align: center;
+  font-size: clamp(18px, 4cqmin, 26px);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--accent);
+  opacity: 0;
+  transition: opacity 0.25s ease, bottom 0.3s ease;
+}
+
+.memo__romaji[data-revealed] {
+  opacity: 1;
+  bottom: 14%;
+}
+
+.memo__counter {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--ink2);
+}
+
+.memo__hint {
+  position: absolute;
+  bottom: 14px;
+  right: 16px;
+  font-size: 12px;
+  color: var(--ink2);
+}
+
+.memo__due {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--accent) 16%, transparent);
+  color: var(--accent);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+.memo__mastery {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+}
+
+.memo__actions,
+.memo__judge {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  justify-content: center;
+}
+
+.memo__judge-bad:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.memo__judge-good {
+  border-color: var(--ok);
+  color: var(--ok);
+  font-weight: 700;
+}
+
+.memo__judge-good:hover:not(:disabled) {
+  border-color: var(--ok);
+  background: color-mix(in oklab, var(--ok) 14%, transparent);
+  color: var(--ok);
+}
+
+.memo__list-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  margin-top: var(--s-2);
+}
+
+.memo__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: var(--s-3);
+}
+
+.memo__list-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-1);
+  min-height: 82px;
+  border-radius: var(--r-lg);
+  animation: riseIn 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 40%;
+}
+
+.memo__list-item[aria-current='true'] {
+  border-color: var(--accent);
+}
+
+.memo__list-char {
+  font-family: var(--jp);
+  font-size: 30px;
+  line-height: 1;
+  color: var(--sumi);
+}
+
+.memo__list-item:hover .memo__list-char {
+  color: var(--accent);
+}
+
+.memo__list-romaji {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--ink2);
+}
+
+.memo__list-item[data-mastery]::after {
+  content: '';
+  position: absolute;
+  left: 28%;
+  right: 28%;
+  bottom: 6px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--line);
+}
+
+.memo__list-item[data-mastery='0']::after {
+  display: none;
+}
+
+.memo__list-item[data-mastery='1']::after {
+  background: color-mix(in oklab, var(--ok) 25%, var(--line));
+}
+
+.memo__list-item[data-mastery='2']::after {
+  background: color-mix(in oklab, var(--ok) 45%, var(--line));
+}
+
+.memo__list-item[data-mastery='3']::after {
+  background: color-mix(in oklab, var(--ok) 65%, var(--line));
+}
+
+.memo__list-item[data-mastery='4']::after {
+  background: color-mix(in oklab, var(--ok) 85%, var(--line));
+}
+
+.memo__list-item[data-mastery='5']::after {
+  background: var(--ok);
+}
