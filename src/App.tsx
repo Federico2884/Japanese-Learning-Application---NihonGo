@@ -3,6 +3,7 @@ import { AppShell } from './components/AppShell'
 import Home from './pages/Home'
 import KanaDetail from './pages/KanaDetail'
 import KanaTable from './pages/KanaTable'
+import Memorize from './pages/Memorize'
 import Placeholder from './pages/Placeholder'
 import WritePractice from './pages/WritePractice'
 
@@ -13,15 +14,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
 
         <Route path="/hafalan" element={<Navigate to="/hafalan/hiragana" replace />} />
-        <Route
-          path="/hafalan/:script"
-          element={
-            <Placeholder
-              title="Hafalan"
-              description="Kartu huruf per baris gojūon: ketuk kartu untuk membuka bacaannya, lalu lanjut ke huruf berikutnya."
-            />
-          }
-        />
+        <Route path="/hafalan/:script" element={<Memorize />} />
 
         <Route path="/tabel" element={<Navigate to="/tabel/hiragana" replace />} />
         <Route path="/tabel/:script" element={<KanaTable />} />
