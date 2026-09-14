@@ -6,11 +6,15 @@
   "description": "NihonGo - aplikasi belajar hiragana & katakana dengan latihan menulis stylus",
   "scripts": {
     "dev": "vite",
+    "dev:host": "vite --host",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest",
-    "typecheck": "tsc -b"
+    "typecheck": "tsc -b",
+    "build:kana": "vite-node scripts/build-kana-data.ts",
+    "build:fonts": "vite-node scripts/build-fonts.ts",
+    "build:icons": "vite-node scripts/build-icons.ts"
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -22,8 +26,11 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
+    "sharp": "^0.33.5",
+    "svg-path-properties": "^1.3.0",
     "typescript": "^5.6.3",
     "vite": "^5.4.11",
+    "vite-plugin-pwa": "^0.21.2",
     "vitest": "^2.1.8"
   }
 }

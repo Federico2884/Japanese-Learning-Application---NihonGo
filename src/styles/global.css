@@ -1,58 +1,63 @@
 /* ==========================================================================
-   NihonGo - token & gaya dasar
-   Palet terinspirasi kertas washi + tinta sumi + vermilion (shu-iro).
+   Token & gaya dasar NihonGo
+   Mengikuti design.md: tema gelap sebagai bawaan, terang lewat [data-theme].
    ========================================================================== */
 
 :root {
-  color-scheme: light dark;
+  --bg: #171513;
+  --surface: #221f1c;
+  --paper: #1d1a17;
+  --line: #3a342e;
+  --ink: #f1ece3;
+  --ink2: #a9a093;
+  --accent: #e0787c;
+  --ok: #6cc08c;
+  --warn: #e0a950;
+  --sumi: #f4efe6;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.45), 0 14px 34px -20px rgb(0 0 0 / 0.8);
+  /* Teks di atas tombol aksen; bukan putih, agar kontrasnya cukup di tema gelap. */
+  --on-accent: #1a1512;
 
-  --bg: #f6f2ea;
-  --bg-raised: #fffdf8;
-  --bg-sunken: #ece5d8;
-  --border: #ddd2bf;
-  --text: #24201c;
-  --text-muted: #6b6257;
+  /* Comic Relief disimpan di repo; font sistem tetap jadi cadangan. */
+  --ui: 'Comic Relief', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --jp: 'Hiragino Sans', 'Yu Gothic', YuGothic, 'Noto Sans JP', 'MS Gothic', sans-serif;
 
-  --accent: #b5454a;
-  --accent-strong: #93353a;
-  --accent-soft: #f5dcd9;
-  --ok: #2f7d55;
-  --warn: #b5741f;
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 14px;
+  --r-xl: 18px;
+  --r-2xl: 22px;
 
-  --radius-sm: 8px;
-  --radius: 14px;
-  --radius-lg: 22px;
-  --shadow: 0 1px 2px rgb(36 32 28 / 0.06), 0 8px 24px rgb(36 32 28 / 0.08);
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 10px;
+  --s-4: 14px;
+  --s-5: 16px;
+  --s-6: 20px;
+  --s-7: 24px;
+  --s-8: 40px;
 
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 16px;
-  --space-4: 24px;
-  --space-5: 40px;
-
-  /* Target sentuh minimal supaya nyaman di tablet */
+  /* Target sentuh minimal, agar nyaman dipakai di tablet. */
   --tap: 48px;
 
-  --font-ui: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-  --font-jp: 'Hiragino Sans', 'Yu Gothic', YuGothic, 'Noto Sans JP', 'MS PGothic', var(--font-ui);
+  color-scheme: dark;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #171513;
-    --bg-raised: #221f1c;
-    --bg-sunken: #100e0d;
-    --border: #3a342e;
-    --text: #f1ece3;
-    --text-muted: #a9a093;
+[data-theme='light'] {
+  --bg: #f6f2ea;
+  --surface: #fffdf8;
+  --paper: #fffdf8;
+  --line: #ddd2bf;
+  --ink: #24201c;
+  --ink2: #6b6257;
+  --accent: #b5454a;
+  --ok: #2f7d55;
+  --warn: #b5741f;
+  --sumi: #1f1b17;
+  --shadow: 0 1px 2px rgb(36 32 28 / 0.05), 0 12px 30px -18px rgb(36 32 28 / 0.3);
+  --on-accent: #fffdf8;
 
-    --accent: #e0787c;
-    --accent-strong: #f0999c;
-    --accent-soft: #3a2325;
-    --ok: #6cc08c;
-    --warn: #e0a950;
-    --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px rgb(0 0 0 / 0.35);
-  }
+  color-scheme: light;
 }
 
 * {
@@ -62,81 +67,162 @@
 html,
 body {
   margin: 0;
-  min-height: 100%;
+  height: 100%;
 }
 
 body {
   background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-ui);
-  font-size: 16px;
-  line-height: 1.55;
+  color: var(--ink);
+  font-family: var(--ui);
+  font-size: 15px;
+  line-height: 1.5;
   -webkit-text-size-adjust: 100%;
-  /* Cegah efek kilap/seleksi teks saat menulis dengan stylus */
   -webkit-tap-highlight-color: transparent;
 }
 
 :lang(ja) {
-  font-family: var(--font-jp);
+  font-family: var(--jp);
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
 }
 
 button {
   font: inherit;
-  min-height: var(--tap);
-  padding: 0 var(--space-3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--bg-raised);
-  color: var(--text);
+  color: inherit;
   cursor: pointer;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  min-height: var(--tap);
+  padding: 0 var(--s-5);
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
 }
 
-button:hover {
+button:hover:not(:disabled) {
   border-color: var(--accent);
+  color: var(--accent);
 }
 
-button:focus-visible,
-a:focus-visible {
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+:focus-visible {
   outline: 3px solid var(--accent);
   outline-offset: 2px;
 }
 
-.page {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: var(--space-5) var(--space-3);
+canvas {
+  touch-action: none;
 }
 
-.app-title {
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  font-size: clamp(2.5rem, 8vw, 4rem);
-  line-height: 1.1;
-  font-family: var(--font-jp);
-  color: var(--accent);
+/* ---------- Animasi bersama ---------- */
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
-.app-title small {
-  font-family: var(--font-ui);
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--text-muted);
+@keyframes growX {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
 
-.app-tagline {
-  max-width: 42ch;
-  color: var(--text-muted);
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: none;
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+@keyframes driftUp {
+  from {
+    transform: translateY(40px) scale(1.06);
+    opacity: 0.55;
+  }
+  to {
+    transform: translateY(-40px) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes inkSoak {
+  from {
+    opacity: 0.12;
+    letter-spacing: 0.16em;
+  }
+  to {
+    opacity: 1;
+    letter-spacing: 0;
+  }
+}
+
+/*
+ * Animasi yang digerakkan posisi scroll (animation-timeline).
+ * Browser tanpa dukungan mengabaikan animation-timeline dan tetap memutar
+ * animasinya berbasis waktu, jadi isinya tetap terlihat.
+ */
+.rise-in {
+  animation: riseIn 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 55%;
+}
+
+.rise-in--early {
+  animation-range: entry 0% entry 35%;
+}
+
+.grow-x {
+  transform-origin: 0 50%;
+  animation: growX 0.9s ease both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 70%;
 }
 
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
   }
 }

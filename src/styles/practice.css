@@ -1,0 +1,463 @@
+/* ==========================================================================
+   Latihan menulis: kotak kertas, animasi goresan, panel info
+   ========================================================================== */
+
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  padding: clamp(24px, 5vw, 44px);
+}
+
+.placeholder__mark {
+  font-family: var(--jp);
+  font-size: 40px;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.placeholder h1 {
+  font-size: clamp(22px, 4vw, 30px);
+}
+
+.placeholder p {
+  color: var(--ink2);
+  max-width: 52ch;
+  text-wrap: pretty;
+}
+
+.placeholder__note {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink2);
+}
+
+/* ---------- Tata letak halaman latihan ---------- */
+
+.practice {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 2.4vw, 24px);
+}
+
+.practice__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+}
+
+.script-switch {
+  display: flex;
+  gap: var(--s-2);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--s-5);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink2);
+  text-decoration: none;
+}
+
+.chip[aria-selected='true'] {
+  border-color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 14%, transparent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.practice__layout {
+  display: grid;
+  gap: var(--s-7);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 900px) {
+  .practice__layout {
+    grid-template-columns: minmax(0, 1.35fr) minmax(300px, 1fr);
+    align-items: start;
+  }
+}
+
+.practice__pad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-4);
+}
+
+.practice__feedback {
+  min-height: 1.6em;
+  text-align: center;
+  color: var(--ink2);
+  font-weight: 500;
+}
+
+.practice__feedback.is-correct {
+  color: var(--ok);
+}
+
+.practice__feedback.is-wrong {
+  color: var(--accent);
+}
+
+.practice__controls,
+.result-card__actions,
+.kana-nav__steps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--s-3);
+}
+
+/* ---------- Kotak menulis ---------- */
+
+.writing-pad {
+  position: relative;
+  container-type: size;
+  width: min(100%, min(62vh, 560px));
+  aspect-ratio: 1;
+  border-radius: var(--r-2xl);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  /* Wajib: cegah halaman ikut scroll/zoom saat menulis dengan stylus atau jari. */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.writing-pad > svg,
+.writing-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.writing-pad__grid rect {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 0.8;
+}
+
+.writing-pad__grid line {
+  stroke: var(--line);
+  stroke-width: 0.5;
+  stroke-dasharray: 2 2;
+}
+
+.writing-canvas {
+  color: var(--sumi);
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.writing-canvas[data-disabled] {
+  cursor: default;
+}
+
+.writing-pad__guide .stroke-animator__path {
+  stroke: var(--line);
+  stroke-width: 5;
+  opacity: 0.9;
+}
+
+.writing-pad[data-finished] .writing-pad__guide .stroke-animator__path {
+  stroke: color-mix(in oklab, var(--ok) 35%, transparent);
+}
+
+.writing-pad__hint .stroke-animator__path {
+  stroke: var(--accent);
+  stroke-width: 4.5;
+  opacity: 0.75;
+}
+
+.writing-pad__ink path,
+.writing-pad__ink polyline {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.writing-pad__accepted,
+.writing-pad__draft {
+  stroke: var(--sumi);
+}
+
+.writing-pad__accepted.is-new {
+  animation: accepted-in 0.35s ease-out;
+}
+
+.writing-pad__draft.is-correct {
+  stroke: var(--ok);
+}
+
+.writing-pad__draft.is-wrong {
+  stroke: var(--accent);
+}
+
+.writing-pad__rejected {
+  stroke: var(--accent);
+  animation: rejected-out 0.7s ease-in forwards;
+}
+
+@keyframes accepted-in {
+  from {
+    stroke: var(--ok);
+  }
+}
+
+@keyframes rejected-out {
+  0%,
+  45% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ---------- Animasi urutan goresan ---------- */
+
+.stroke-animator {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.stroke-animator__path {
+  fill: none;
+  stroke: var(--sumi);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.stroke-animator__path.is-animated {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation-name: draw-stroke;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+.stroke-animator__start {
+  fill: var(--accent);
+  opacity: 0;
+  animation: start-dot 0.5s ease-out both;
+}
+
+.stroke-animator__number {
+  fill: var(--ink2);
+  font-size: 7px;
+  font-family: var(--ui);
+}
+
+@keyframes draw-stroke {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes start-dot {
+  0% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ---------- Panel info ---------- */
+
+.practice__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+
+.kana-card {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  padding: var(--s-4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2xl);
+  background: var(--surface);
+}
+
+.kana-card__char {
+  display: grid;
+  place-items: center;
+  width: 96px;
+  height: 96px;
+  flex: none;
+  border-radius: var(--r-lg);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  font-size: 3.6rem;
+  line-height: 1;
+}
+
+.kana-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2) var(--s-4);
+}
+
+.kana-card__romaji {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.kana-card__strokes {
+  color: var(--ink2);
+}
+
+.mode-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s-2);
+}
+
+.mode-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  padding: var(--s-2) var(--s-4);
+  text-align: left;
+  min-height: 64px;
+}
+
+.mode-tab[aria-checked='true'] {
+  border-color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 14%, transparent);
+  color: var(--accent);
+}
+
+.mode-tab__label {
+  font-weight: 600;
+}
+
+.mode-tab__hint {
+  font-size: 0.78rem;
+  color: var(--ink2);
+  line-height: 1.25;
+}
+
+.demo {
+  padding: var(--s-4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2xl);
+  background: var(--surface);
+}
+
+.demo__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  margin-bottom: var(--s-2);
+  color: var(--ink2);
+  font-weight: 600;
+}
+
+.demo__box {
+  width: min(100%, 220px);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  border-radius: var(--r-lg);
+  background: var(--paper);
+  border: 1px solid var(--line);
+}
+
+.kana-nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.kana-nav__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+.kana-nav__item {
+  display: grid;
+  place-items: center;
+  min-width: 52px;
+  height: 52px;
+  padding: 0 var(--s-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: transparent;
+  color: var(--sumi);
+  text-decoration: none;
+  font-size: 24px;
+}
+
+.kana-nav__item[aria-current='true'] {
+  border-color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 14%, transparent);
+  color: var(--accent);
+}
+
+.result-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  width: min(100%, 620px);
+  padding: var(--s-4) var(--s-6);
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--ok);
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  animation: popIn 0.35s ease both;
+}
+
+.result-card[data-tier='lumayan'] {
+  border-left-color: var(--warn);
+}
+
+.result-card[data-tier='ulang'] {
+  border-left-color: var(--accent);
+}
+
+.result-card__title {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.result-card__detail {
+  color: var(--ink2);
+}
+
+@media (max-width: 520px) {
+  .mode-tab__hint {
+    display: none;
+  }
+
+  .mode-tab {
+    min-height: var(--tap);
+    align-items: center;
+    text-align: center;
+  }
+}
