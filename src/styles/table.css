@@ -1,0 +1,331 @@
+/* ==========================================================================
+   Tabel kana & detail huruf
+   ========================================================================== */
+
+.table-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-7);
+}
+
+.table-page__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-4);
+}
+
+.table-page__hint {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--ink2);
+}
+
+.pill-group .pill {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ---------- Penanda penguasaan (Leitner) ---------- */
+
+.mastery-legend {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink2);
+}
+
+.mastery-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: transparent;
+}
+
+.mastery-dot[data-level='1'] {
+  background: color-mix(in oklab, var(--ok) 20%, transparent);
+  border-color: color-mix(in oklab, var(--ok) 35%, var(--line));
+}
+
+.mastery-dot[data-level='2'] {
+  background: color-mix(in oklab, var(--ok) 40%, transparent);
+  border-color: color-mix(in oklab, var(--ok) 50%, var(--line));
+}
+
+.mastery-dot[data-level='3'] {
+  background: color-mix(in oklab, var(--ok) 60%, transparent);
+  border-color: var(--ok);
+}
+
+.mastery-dot[data-level='4'] {
+  background: color-mix(in oklab, var(--ok) 80%, transparent);
+  border-color: var(--ok);
+}
+
+.mastery-dot[data-level='5'] {
+  background: var(--ok);
+  border-color: var(--ok);
+}
+
+/* ---------- Kelompok & sel ---------- */
+
+.kana-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+/* Judul kelompok menempel saat daftar digulir. */
+.kana-group__head {
+  position: sticky;
+  top: -4px;
+  z-index: 2;
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-3);
+  padding: var(--s-2) 2px;
+  background: var(--bg);
+}
+
+.kana-group__head h2 {
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+
+.kana-group__sub {
+  font-size: 12px;
+  color: var(--ink2);
+}
+
+.kana-group__rule {
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+.kana-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 5), minmax(0, 1fr));
+  gap: clamp(6px, 1.2vw, 10px);
+}
+
+.kana-cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-height: 60px;
+  padding: var(--s-2) var(--s-1);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--sumi);
+  text-decoration: none;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.kana-cell:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.kana-cell.is-empty {
+  border-style: dashed;
+  background: transparent;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.kana-cell__char {
+  font-family: var(--jp);
+  font-size: clamp(22px, 4.4vw, 30px);
+  line-height: 1;
+}
+
+.kana-cell__romaji {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--ink2);
+  min-height: 12px;
+}
+
+/* Garis tipis di dasar sel menandai tingkat penguasaan. */
+.kana-cell[data-mastery]::after {
+  content: '';
+  position: absolute;
+  left: 22%;
+  right: 22%;
+  bottom: 5px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--line);
+}
+
+.kana-cell[data-mastery='0']::after {
+  display: none;
+}
+
+.kana-cell[data-mastery='1']::after {
+  background: color-mix(in oklab, var(--ok) 25%, var(--line));
+}
+
+.kana-cell[data-mastery='2']::after {
+  background: color-mix(in oklab, var(--ok) 45%, var(--line));
+}
+
+.kana-cell[data-mastery='3']::after {
+  background: color-mix(in oklab, var(--ok) 65%, var(--line));
+}
+
+.kana-cell[data-mastery='4']::after {
+  background: color-mix(in oklab, var(--ok) 85%, var(--line));
+}
+
+.kana-cell[data-mastery='5']::after {
+  background: var(--ok);
+}
+
+/* ---------- Detail huruf ---------- */
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-6);
+}
+
+.detail__main {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--s-6);
+  align-items: center;
+  padding: clamp(18px, 3vw, 28px);
+}
+
+.detail__demo {
+  display: flex;
+  justify-content: center;
+  gap: var(--s-3);
+}
+
+.detail__paper {
+  width: min(240px, 60vw);
+  aspect-ratio: 1;
+}
+
+.detail__demo > .paper-box > .stroke-animator {
+  position: absolute;
+  inset: 0;
+  padding: 7%;
+}
+
+.detail__ghost .stroke-animator__path {
+  stroke: var(--line);
+  stroke-width: 5;
+}
+
+.detail__ink .stroke-animator__path {
+  stroke: var(--sumi);
+  stroke-width: 5;
+}
+
+.detail__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  min-width: 0;
+}
+
+.detail__eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink2);
+}
+
+.detail__romaji {
+  font-size: clamp(24px, 4vw, 34px);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.detail__note {
+  font-size: 14px;
+  color: var(--ink2);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.detail__mastery {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: 13px;
+  color: var(--ink2);
+}
+
+.detail__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  margin-top: var(--s-1);
+}
+
+.detail__examples {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+.detail__examples h2 {
+  font-size: 15px;
+}
+
+.detail__example-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--s-4);
+}
+
+.example-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+  padding: var(--s-5);
+  border-radius: var(--r-xl);
+  box-shadow: none;
+}
+
+.example-card__jp {
+  font-family: var(--jp);
+  font-size: 24px;
+  color: var(--sumi);
+}
+
+.example-card__romaji {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--ink2);
+}
+
+.example-card__id {
+  font-size: 13px;
+}
+
+.detail__back {
+  align-self: flex-start;
+  min-height: var(--tap);
+  display: inline-flex;
+  align-items: center;
+  color: var(--ink2);
+}
+
+.detail__back:hover {
+  color: var(--accent);
+}
