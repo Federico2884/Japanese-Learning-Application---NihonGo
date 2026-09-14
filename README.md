@@ -45,10 +45,21 @@ Windows Firewall bertanya; profil **Public** memblokir koneksi dari perangkat la
 | `npm run preview` | Pratinjau hasil build |
 | `npm test` | Jalankan unit test (Vitest) |
 | `npm run build:fonts` | Unduh ulang berkas font antarmuka dari Google Fonts |
+| `npm run build:icons` | Buat ulang ikon aplikasi dari data goresan KanjiVG |
+
+## Memasang di tablet / HP
+
+Aplikasi ini berupa PWA, jadi bisa dipasang ke layar utama:
+
+1. Buka https://federico2884.github.io/Japanese-Learning-Application---NihonGo/ di Chrome.
+2. Menu tiga titik, lalu **Add to Home screen**.
+3. Setelah terpasang, aplikasi terbuka tanpa kolom alamat dan tetap bisa dibuka
+   tanpa internet. Saat ada versi baru, aplikasi menawarkan tombol muat ulang.
 
 ## Teknologi
 
-Vite + React + TypeScript, React Router, Vitest.
+Vite + React + TypeScript, React Router, Vitest, vite-plugin-pwa.
+Deploy otomatis ke GitHub Pages setiap kali ada perubahan masuk ke `main`.
 
 ## Lisensi & atribusi
 

@@ -252,3 +252,29 @@
     linear-gradient(var(--line), var(--line)) center / 100% 1px no-repeat;
   opacity: 0.45;
 }
+
+/* Pemberitahuan versi baru aplikasi. */
+.update-prompt {
+  position: fixed;
+  left: 50%;
+  bottom: calc(76px + env(safe-area-inset-bottom));
+  z-index: 20;
+  transform: translateX(-50%);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-4);
+  width: min(92vw, 560px);
+  padding: var(--s-4) var(--s-5);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow);
+  animation: popIn 0.3s ease both;
+}
+
+.update-prompt__actions {
+  display: flex;
+  gap: var(--s-2);
+  margin-left: auto;
+}

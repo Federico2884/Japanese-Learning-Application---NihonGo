@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useTheme } from '../state/theme'
 import { Logo } from './Logo'
+import { UpdatePrompt } from './UpdatePrompt'
 
 interface NavItem {
   to: string
@@ -121,6 +122,8 @@ export function AppShell() {
           </NavLink>
         ))}
       </nav>
+
+      <UpdatePrompt />
     </div>
   )
 }
