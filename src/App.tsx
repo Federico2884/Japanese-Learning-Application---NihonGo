@@ -4,6 +4,7 @@ import Home from './pages/Home'
 import KanaDetail from './pages/KanaDetail'
 import KanaTable from './pages/KanaTable'
 import Memorize from './pages/Memorize'
+import Quiz from './pages/Quiz'
 import Placeholder from './pages/Placeholder'
 import WritePractice from './pages/WritePractice'
 
@@ -24,15 +25,7 @@ export default function App() {
         <Route path="/tulis/:script" element={<WritePractice />} />
         <Route path="/tulis/:script/:char" element={<WritePractice />} />
 
-        <Route
-          path="/kuis"
-          element={
-            <Placeholder
-              title="Kuis"
-              description="Tiga bentuk soal: kana ke romaji, bunyi ke kana, dan romaji ke tulisan tangan."
-            />
-          }
-        />
+        <Route path="/kuis" element={<Quiz />} />
         <Route
           path="/atur"
           element={
