@@ -5,7 +5,7 @@ import KanaDetail from './pages/KanaDetail'
 import KanaTable from './pages/KanaTable'
 import Memorize from './pages/Memorize'
 import Quiz from './pages/Quiz'
-import Placeholder from './pages/Placeholder'
+import Settings from './pages/Settings'
 import WritePractice from './pages/WritePractice'
 
 export default function App() {
@@ -26,15 +26,7 @@ export default function App() {
         <Route path="/tulis/:script/:char" element={<WritePractice />} />
 
         <Route path="/kuis" element={<Quiz />} />
-        <Route
-          path="/atur"
-          element={
-            <Placeholder
-              title="Pengaturan"
-              description="Tingkat toleransi penilaian, mode hanya-stylus, tampilkan romaji, ketebalan tinta, dan kecepatan animasi."
-            />
-          }
-        />
+        <Route path="/atur" element={<Settings />} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
