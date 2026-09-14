@@ -22,17 +22,25 @@ npm install
 npm run dev
 ```
 
-Untuk mencoba dari tablet di jaringan WiFi yang sama:
+Untuk mencoba dari tablet/HP di jaringan WiFi yang sama:
 
 ```bash
-npm run dev -- --host
+npm run dev:host
 ```
+
+Buka alamat `Network:` yang dicetak Vite (mis. `http://192.168.x.x:5173`) di tablet.
+Di Windows, pastikan profil jaringan WiFi bertipe **Private** dan izinkan Node.js saat
+Windows Firewall bertanya; profil **Public** memblokir koneksi dari perangkat lain.
+
+> Hindari `npm run dev -- --host` di Windows PowerShell 5.1: argumen setelah `--`
+> bisa hilang sehingga server hanya bisa diakses dari laptop sendiri.
 
 ## Skrip
 
 | Perintah | Kegunaan |
 | --- | --- |
 | `npm run dev` | Jalankan server pengembangan |
+| `npm run dev:host` | Server pengembangan yang bisa diakses dari perangkat lain di WiFi yang sama |
 | `npm run build` | Cek tipe + build produksi ke `dist/` |
 | `npm run preview` | Pratinjau hasil build |
 | `npm test` | Jalankan unit test (Vitest) |

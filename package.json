@@ -6,6 +6,7 @@
   "description": "NihonGo - aplikasi belajar hiragana & katakana dengan latihan menulis stylus",
   "scripts": {
     "dev": "vite",
+    "dev:host": "vite --host",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "test": "vitest run --passWithNoTests",
