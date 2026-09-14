@@ -106,11 +106,8 @@ export default function WritePractice() {
       : ''
 
   return (
-    <main className="page practice">
+    <div className="practice">
       <header className="practice__header">
-        <Link to="/" className="back-link">
-          ← Beranda
-        </Link>
         <div className="script-switch" role="tablist" aria-label="Pilih huruf">
           {(['hiragana', 'katakana'] as const).map((item) => (
             <Link
@@ -257,6 +254,6 @@ export default function WritePractice() {
           </nav>
         </aside>
       </div>
-    </main>
+    </div>
   )
 }

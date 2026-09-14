@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import { KANJIVG_SIZE, type ReferenceStroke } from '../data/strokes'
 
 interface StrokeAnimatorProps {
@@ -15,6 +15,8 @@ interface StrokeAnimatorProps {
   showNumbers?: boolean
   /** Goresan sebelum indeks ini digambar utuh sebagai konteks (dipakai petunjuk). */
   completedBefore?: number
+  /** Ulangi animasi terus-menerus, dengan jeda singkat tiap putaran. */
+  loop?: boolean
   className?: string
   onDone?: () => void
 }
@@ -22,6 +24,8 @@ interface StrokeAnimatorProps {
 /** Lama animasi satu goresan dalam milidetik pada kecepatan normal. */
 const STROKE_DURATION = 650
 const STROKE_GAP = 180
+/** Jeda sebelum animasi berulang diputar lagi dari awal. */
+const LOOP_PAUSE = 900
 
 /**
  * Menampilkan huruf dari data KanjiVG dan menganimasikan urutan goresannya.
@@ -35,16 +39,25 @@ export function StrokeAnimator({
   speed = 1,
   showNumbers = false,
   completedBefore = 0,
+  loop = false,
   className,
   onDone,
 }: StrokeAnimatorProps) {
   const duration = STROKE_DURATION / speed
   const gap = STROKE_GAP / speed
   const lastAnimated = play === 'all' ? strokes.length - 1 : play
+  const [loopKey, setLoopKey] = useState(0)
+
+  const cycle = strokes.length * (duration + gap) + LOOP_PAUSE
+  useEffect(() => {
+    if (!loop || strokes.length === 0) return
+    const timer = window.setInterval(() => setLoopKey((key) => key + 1), cycle)
+    return () => window.clearInterval(timer)
+  }, [loop, cycle, strokes.length])
 
   return (
     <svg
-      key={replayKey}
+      key={String(replayKey) + '-' + String(loopKey)}
       className={['stroke-animator', className].filter(Boolean).join(' ')}
       viewBox={'0 0 ' + KANJIVG_SIZE + ' ' + KANJIVG_SIZE}
       aria-hidden="true"
