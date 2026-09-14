@@ -119,13 +119,16 @@ function acceptStroke(state: PracticeState, points: Point[]): PracticeState {
   }
 }
 
+/** Bobot satu kesalahan, dihitung sebagai sebagian goresan tambahan yang tidak bernilai. */
+const MISTAKE_WEIGHT = 0.5
+
 /**
- * Kesalahan di tengah jalan mengurangi akurasi: tiap kesalahan setara dengan
- * satu goresan tambahan yang tidak bernilai.
+ * Kesalahan di tengah jalan mengurangi akurasi, tapi tidak sampai menghapus
+ * nilai goresan yang akhirnya ditulis dengan benar.
  */
 function penalize(score: CharacterScore, mistakes: number): CharacterScore {
   if (score.total === 0) return score
-  return { ...score, accuracy: (score.accuracy * score.total) / (score.total + mistakes) }
+  return { ...score, accuracy: (score.accuracy * score.total) / (score.total + mistakes * MISTAKE_WEIGHT) }
 }
 
 function gradeDrafts(state: PracticeState, drafts: Point[][]): PracticeState {
