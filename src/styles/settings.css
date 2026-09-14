@@ -149,3 +149,22 @@
   line-height: 1.6;
   text-wrap: pretty;
 }
+
+.settings__details {
+  margin-top: var(--s-2);
+  font-size: 13px;
+  color: var(--ink2);
+}
+
+.settings__details summary {
+  cursor: pointer;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.settings__details ul {
+  margin: var(--s-2) 0 0;
+  padding-left: var(--s-6);
+  line-height: 1.6;
+}

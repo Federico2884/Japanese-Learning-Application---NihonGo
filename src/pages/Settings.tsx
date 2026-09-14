@@ -1,10 +1,27 @@
 import { useState } from 'react'
-import { speak, speechSupported, useJapaneseVoice } from '../audio/speak'
+import { speak, speechSupported, useJapaneseVoice, type SpeakOutcome } from '../audio/speak'
 import { ALL_KANA } from '../data/kana'
 import { summarize } from '../state/progress'
 import { useProgress } from '../state/useProgress'
 import { useSettings, type Settings as SettingsValue } from '../state/settings'
 import type { Tolerance } from '../writing/strokeMatcher'
+
+/** Menjelaskan hasil uji suara dalam kalimat yang bisa ditindaklanjuti. */
+function describeOutcome(outcome: SpeakOutcome): string {
+  if (outcome.ok) return 'Berbunyi lewat suara ' + outcome.voice + '.'
+  switch (outcome.reason) {
+    case 'no-voice':
+      return 'Tidak ada suara Jepang yang bisa dipakai.'
+    case 'error':
+      return outcome.detail === 'not-allowed'
+        ? 'Peramban menolak memutar suara. Coba ketuk layar dulu, lalu uji lagi.'
+        : 'Peramban melaporkan galat: ' + outcome.detail + '.'
+    case 'silent':
+      return outcome.remote
+        ? 'Perintah diterima tetapi tidak ada bunyi. Suara ' + outcome.voice + ' adalah suara daring yang perlu internet; pasang suara Jepang luring, atau periksa koneksi.'
+        : 'Perintah diterima tetapi tidak ada bunyi. Periksa volume media perangkat, lalu coba tutup dan buka aplikasi.'
+  }
+}
 
 const TOLERANCES: ReadonlyArray<[Tolerance, string]> = [
   ['mudah', 'Mudah'],
@@ -49,6 +66,15 @@ export default function Settings() {
   const { progress, reset } = useProgress()
   const voice = useJapaneseVoice()
   const [confirmReset, setConfirmReset] = useState(false)
+  const [testResult, setTestResult] = useState<SpeakOutcome | null>(null)
+  const [testing, setTesting] = useState(false)
+
+  const testVoice = async () => {
+    setTesting(true)
+    setTestResult(null)
+    setTestResult(await speak('あいうえお'))
+    setTesting(false)
+  }
 
   const ringkasan = summarize(
     ALL_KANA.map((kana) => kana.id),
@@ -151,13 +177,28 @@ export default function Settings() {
         {voice.available ? (
           <>
             <span className="settings__sub">
-              Memakai suara {voice.name} dari perangkat ini. Tombol dengar dan soal kuis bertipe dengar aktif.
+              Memakai suara {voice.name}
+              {voice.remote ? ' (suara daring, perlu internet)' : ' (suara lokal)'}. Ketuk Uji suara untuk
+              memastikan bunyinya benar-benar keluar.
             </span>
             <div className="settings__reset">
-              <button type="button" onClick={() => void speak('あいうえお')}>
-                ♪ Uji suara
+              <button type="button" onClick={() => void testVoice()} disabled={testing}>
+                {testing ? 'Menguji…' : '♪ Uji suara'}
               </button>
+              {testResult && <span className="settings__sub">{describeOutcome(testResult)}</span>}
             </div>
+            {voice.all.length > 1 && (
+              <details className="settings__details">
+                <summary>Suara Jepang yang terdaftar ({voice.all.length})</summary>
+                <ul>
+                  {voice.all.map((item) => (
+                    <li key={item.name + item.lang}>
+                      {item.name} · {item.lang} · {item.localService ? 'lokal' : 'daring'}
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            )}
           </>
         ) : (
           <span className="settings__sub">
