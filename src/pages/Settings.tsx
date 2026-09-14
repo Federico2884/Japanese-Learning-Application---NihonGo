@@ -6,16 +6,45 @@ import { useProgress } from '../state/useProgress'
 import { useSettings, type Settings as SettingsValue } from '../state/settings'
 import type { Tolerance } from '../writing/strokeMatcher'
 
+/** Petunjuk pemasangan suara sesuai sistem perangkat. */
+function installHint(): string {
+  const ua = typeof navigator === 'undefined' ? '' : navigator.userAgent
+  if (/Android/i.test(ua)) {
+    return 'Di Android: Settings → cari "Text-to-speech" → buka pengaturan mesin Google → Install voice data → pilih 日本語 dan unduh.'
+  }
+  if (/Windows/i.test(ua)) {
+    return 'Di Windows: Settings → Time & language → Speech → Manage voices → Add voices → pilih Japanese. Menambahkan bahasa Jepang saja tidak cukup, paket suaranya harus ikut dipasang.'
+  }
+  return 'Pasang paket suara bahasa Jepang lewat pengaturan sistem perangkat ini.'
+}
+
 /** Menjelaskan hasil uji suara dalam kalimat yang bisa ditindaklanjuti. */
 function describeOutcome(outcome: SpeakOutcome): string {
   if (outcome.ok) return 'Berbunyi lewat suara ' + outcome.voice + '.'
   switch (outcome.reason) {
     case 'no-voice':
-      return 'Tidak ada suara Jepang yang bisa dipakai.'
-    case 'error':
-      return outcome.detail === 'not-allowed'
-        ? 'Peramban menolak memutar suara. Coba ketuk layar dulu, lalu uji lagi.'
-        : 'Peramban melaporkan galat: ' + outcome.detail + '.'
+      return 'Tidak ada suara Jepang yang bisa dipakai. ' + installHint()
+    case 'error': {
+      const dicoba = outcome.tried > 1 ? ' Sudah dicoba ' + outcome.tried + ' suara.' : ''
+      if (outcome.detail === 'not-allowed') {
+        return 'Peramban menolak memutar suara. Coba ketuk layar dulu, lalu uji lagi.'
+      }
+      if (outcome.detail === 'synthesis-failed') {
+        return (
+          'Mesin suara gagal membunyikan (synthesis-failed).' +
+          dicoba +
+          ' Biasanya data suaranya belum lengkap terpasang. ' +
+          installHint()
+        )
+      }
+      if (outcome.detail === 'network') {
+        return 'Suara yang dipakai membutuhkan internet dan permintaannya gagal.' + dicoba + ' Pasang suara Jepang luring, atau periksa koneksi.'
+      }
+      if (outcome.detail === 'language-unavailable' || outcome.detail === 'voice-unavailable') {
+        return 'Bahasa Jepang belum tersedia di mesin suara perangkat ini. ' + installHint()
+      }
+      return 'Peramban melaporkan galat: ' + outcome.detail + '.' + dicoba
+    }
     case 'silent':
       return outcome.remote
         ? 'Perintah diterima tetapi tidak ada bunyi. Suara ' + outcome.voice + ' adalah suara daring yang perlu internet; pasang suara Jepang luring, atau periksa koneksi.'
