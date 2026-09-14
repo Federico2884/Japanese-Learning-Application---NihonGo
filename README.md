@@ -44,6 +44,7 @@ Windows Firewall bertanya; profil **Public** memblokir koneksi dari perangkat la
 | `npm run build` | Cek tipe + build produksi ke `dist/` |
 | `npm run preview` | Pratinjau hasil build |
 | `npm test` | Jalankan unit test (Vitest) |
+| `npm run build:fonts` | Unduh ulang berkas font antarmuka dari Google Fonts |
 
 ## Teknologi
 
@@ -51,5 +52,12 @@ Vite + React + TypeScript, React Router, Vitest.
 
 ## Lisensi & atribusi
 
-Kode: MIT. Data urutan goresan berasal dari proyek [KanjiVG](https://kanjivg.tagaini.net/)
+Kode: MIT.
+
+Data urutan goresan berasal dari proyek [KanjiVG](https://kanjivg.tagaini.net/)
 (Ulrich Apel, lisensi CC BY-SA 3.0) dan akan dicantumkan pada halaman "Tentang" di dalam aplikasi.
+
+Font antarmuka [Comic Relief](https://fonts.google.com/specimen/Comic+Relief) berlisensi
+SIL Open Font License 1.1 (lihat `src/assets/fonts/OFL.txt`). Berkasnya disimpan di dalam repo
+supaya aplikasi tidak pernah meminta font ke internet dan tetap sama saat offline;
+perbarui dengan `npm run build:fonts`.
