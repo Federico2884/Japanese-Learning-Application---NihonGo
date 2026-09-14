@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { speak, speechSupported, useJapaneseVoice, type SpeakOutcome } from '../audio/speak'
+import { speakKana, useJapaneseVoice, type SpeakOutcome } from '../audio/speak'
 import { ALL_KANA } from '../data/kana'
 import { summarize } from '../state/progress'
 import { useProgress } from '../state/useProgress'
@@ -45,6 +45,8 @@ function describeOutcome(outcome: SpeakOutcome): string {
       }
       return 'Peramban melaporkan galat: ' + outcome.detail + '.' + dicoba
     }
+    case 'blocked':
+      return 'Peramban menahan pemutaran audio (' + outcome.detail + '). Ketuk layar sekali, lalu coba lagi.'
     case 'silent':
       return outcome.remote
         ? 'Perintah diterima tetapi tidak ada bunyi. Suara ' + outcome.voice + ' adalah suara daring yang perlu internet; pasang suara Jepang luring, atau periksa koneksi.'
@@ -101,7 +103,7 @@ export default function Settings() {
   const testVoice = async () => {
     setTesting(true)
     setTestResult(null)
-    setTestResult(await speak('あいうえお'))
+    setTestResult(await speakKana('あ', 'a'))
     setTesting(false)
   }
 
@@ -200,42 +202,24 @@ export default function Settings() {
 
       <section className="card settings__card">
         <div className="settings__head">
-          <strong>Suara bahasa Jepang</strong>
-          <span className="settings__value">{voice.available ? 'tersedia' : 'tidak tersedia'}</span>
+          <strong>Suara kana</strong>
+          <span className="settings__value">rekaman bawaan</span>
         </div>
-        {voice.available ? (
-          <>
-            <span className="settings__sub">
-              Memakai suara {voice.name}
-              {voice.remote ? ' (suara daring, perlu internet)' : ' (suara lokal)'}. Ketuk Uji suara untuk
-              memastikan bunyinya benar-benar keluar.
-            </span>
-            <div className="settings__reset">
-              <button type="button" onClick={() => void testVoice()} disabled={testing}>
-                {testing ? 'Menguji…' : '♪ Uji suara'}
-              </button>
-              {testResult && <span className="settings__sub">{describeOutcome(testResult)}</span>}
-            </div>
-            {voice.all.length > 1 && (
-              <details className="settings__details">
-                <summary>Suara Jepang yang terdaftar ({voice.all.length})</summary>
-                <ul>
-                  {voice.all.map((item) => (
-                    <li key={item.name + item.lang}>
-                      {item.name} · {item.lang} · {item.localService ? 'lokal' : 'daring'}
-                    </li>
-                  ))}
-                </ul>
-              </details>
-            )}
-          </>
-        ) : (
-          <span className="settings__sub">
-            {speechSupported()
-              ? 'Perangkat ini belum punya suara bahasa Jepang, jadi tombol dengar dan soal kuis bertipe dengar disembunyikan. Di Windows: Settings → Time & language → Language & region → tambahkan bahasa Jepang beserta paket Speech. Di Android: Settings → cari "Text-to-speech", buka pengaturan mesin Google, lalu unduh bahasa Jepang.'
-              : 'Peramban ini tidak mendukung pelafalan, jadi tombol dengar dan soal kuis bertipe dengar disembunyikan.'}
-          </span>
-        )}
+        <span className="settings__sub">
+          Bunyi tiap kana memakai rekaman yang disertakan di dalam aplikasi, jadi tidak bergantung pada mesin
+          suara perangkat dan tetap berbunyi tanpa internet.
+        </span>
+        <div className="settings__reset">
+          <button type="button" onClick={() => void testVoice()} disabled={testing}>
+            {testing ? 'Menguji…' : '♪ Uji suara'}
+          </button>
+          {testResult && <span className="settings__sub">{describeOutcome(testResult)}</span>}
+        </div>
+        <span className="settings__sub">
+          {voice.available
+            ? 'Mesin suara perangkat (' + voice.name + ') tersedia sebagai cadangan.'
+            : 'Perangkat ini tidak punya suara bahasa Jepang, tetapi rekaman bawaan tetap berbunyi.'}
+        </span>
       </section>
 
       <section className="card settings__card">

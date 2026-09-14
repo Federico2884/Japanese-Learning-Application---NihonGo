@@ -14,7 +14,8 @@
     "typecheck": "tsc -b",
     "build:kana": "vite-node scripts/build-kana-data.ts",
     "build:fonts": "vite-node scripts/build-fonts.ts",
-    "build:icons": "vite-node scripts/build-icons.ts"
+    "build:icons": "vite-node scripts/build-icons.ts",
+    "build:audio": "vite-node scripts/build-audio.ts"
   },
   "dependencies": {
     "react": "^18.3.1",

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
-import { speak, useJapaneseVoice } from '../audio/speak'
+import { speakKana } from '../audio/speak'
 import { getKana, type Kana, type KanaScript } from '../data/kana'
 import { isDue, masteryLevel } from '../state/progress'
 import { useSettings } from '../state/settings'
@@ -29,7 +29,6 @@ export default function Memorize() {
   const params = useParams()
   const [settings] = useSettings()
   const { progress, review } = useProgress()
-  const voice = useJapaneseVoice()
 
   const [row, setRow] = useState<string>('all')
   const [position, setPosition] = useState(0)
@@ -127,11 +126,9 @@ export default function Memorize() {
           <button type="button" className="memo__judge-bad" onClick={() => judge(false)}>
             Belum hafal
           </button>
-          {voice.available && (
-            <button type="button" onClick={() => void speak(current.char)} aria-label="Dengarkan">
-              ♪
-            </button>
-          )}
+          <button type="button" onClick={() => void speakKana(current.char, current.romaji)} aria-label="Dengarkan">
+            ♪
+          </button>
           <button type="button" className="memo__judge-good" onClick={() => judge(true)}>
             Sudah hafal
           </button>

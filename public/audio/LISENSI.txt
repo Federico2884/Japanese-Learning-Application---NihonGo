@@ -1,0 +1,14 @@
+Rekaman bunyi kana di folder ini dibuat dengan Piper TTS
+(https://github.com/rhasspy/piper), memakai suara ja_JA-hi_fi_captain-medium.
+
+Suara tersebut berasal dari dataset Hi-Fi-CAPTAIN milik NICT:
+https://ast-astrec.nict.go.jp/en/release/hi-fi-captain/
+
+Lisensi dataset: Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+(CC BY-NC-SA 4.0) - https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+Artinya berkas audio ini boleh dipakai dan disebarkan untuk keperluan BUKAN
+KOMERSIAL, dengan mencantumkan sumber di atas, dan turunannya memakai lisensi
+yang sama. Untuk pemakaian komersial, ganti berkas audio ini dengan sumber lain.
+
+Dibuat ulang dengan: npm run build:audio

@@ -46,6 +46,7 @@ Windows Firewall bertanya; profil **Public** memblokir koneksi dari perangkat la
 | `npm test` | Jalankan unit test (Vitest) |
 | `npm run build:fonts` | Unduh ulang berkas font antarmuka dari Google Fonts |
 | `npm run build:icons` | Buat ulang ikon aplikasi dari data goresan KanjiVG |
+| `npm run build:audio` | Buat ulang rekaman bunyi kana (butuh piper-tts) |
 
 ## Memasang di tablet / HP
 
@@ -67,6 +68,12 @@ Kode: MIT.
 
 Data urutan goresan berasal dari proyek [KanjiVG](https://kanjivg.tagaini.net/)
 (Ulrich Apel, lisensi CC BY-SA 3.0) dan akan dicantumkan pada halaman "Tentang" di dalam aplikasi.
+
+Bunyi kana memakai rekaman yang dibuat dengan [Piper TTS](https://github.com/rhasspy/piper)
+(suara `ja_JA-hi_fi_captain-medium`, dari dataset
+[Hi-Fi-CAPTAIN](https://ast-astrec.nict.go.jp/en/release/hi-fi-captain/) milik NICT,
+lisensi CC BY-SA-NC 4.0 — bukan untuk penggunaan komersial). Berkasnya dibuat sekali
+dengan `npm run build:audio`, yang memerlukan `pip install --user piper-tts pyopenjtalk-plus`.
 
 Font antarmuka [Comic Relief](https://fonts.google.com/specimen/Comic+Relief) berlisensi
 SIL Open Font License 1.1 (lihat `src/assets/fonts/OFL.txt`). Berkasnya disimpan di dalam repo
