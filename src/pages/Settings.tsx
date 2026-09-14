@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { speak, speechSupported, useJapaneseVoice } from '../audio/speak'
 import { ALL_KANA } from '../data/kana'
 import { summarize } from '../state/progress'
 import { useProgress } from '../state/useProgress'
@@ -46,6 +47,7 @@ const TOGGLES: readonly ToggleRow[] = [
 export default function Settings() {
   const [settings, update] = useSettings()
   const { progress, reset } = useProgress()
+  const voice = useJapaneseVoice()
   const [confirmReset, setConfirmReset] = useState(false)
 
   const ringkasan = summarize(
@@ -139,6 +141,31 @@ export default function Settings() {
             </button>
           ))}
         </div>
+      </section>
+
+      <section className="card settings__card">
+        <div className="settings__head">
+          <strong>Suara bahasa Jepang</strong>
+          <span className="settings__value">{voice.available ? 'tersedia' : 'tidak tersedia'}</span>
+        </div>
+        {voice.available ? (
+          <>
+            <span className="settings__sub">
+              Memakai suara {voice.name} dari perangkat ini. Tombol dengar dan soal kuis bertipe dengar aktif.
+            </span>
+            <div className="settings__reset">
+              <button type="button" onClick={() => void speak('あいうえお')}>
+                ♪ Uji suara
+              </button>
+            </div>
+          </>
+        ) : (
+          <span className="settings__sub">
+            {speechSupported()
+              ? 'Perangkat ini belum punya suara bahasa Jepang, jadi tombol dengar dan soal kuis bertipe dengar disembunyikan. Di Windows: Settings → Time & language → Language & region → tambahkan bahasa Jepang beserta paket Speech. Di Android: Settings → cari "Text-to-speech", buka pengaturan mesin Google, lalu unduh bahasa Jepang.'
+              : 'Peramban ini tidak mendukung pelafalan, jadi tombol dengar dan soal kuis bertipe dengar disembunyikan.'}
+          </span>
+        )}
       </section>
 
       <section className="card settings__card">
