@@ -12,7 +12,8 @@
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest",
     "typecheck": "tsc -b",
-    "build:kana": "vite-node scripts/build-kana-data.ts"
+    "build:kana": "vite-node scripts/build-kana-data.ts",
+    "build:fonts": "vite-node scripts/build-fonts.ts"
   },
   "dependencies": {
     "react": "^18.3.1",
