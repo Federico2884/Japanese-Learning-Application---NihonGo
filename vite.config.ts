@@ -9,9 +9,10 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      // Versi baru tidak dipasang diam-diam; pengguna ditawari memuat ulang
-      // supaya latihan yang sedang berjalan tidak terputus.
-      registerType: 'prompt',
+      // Versi baru diunduh diam-diam lalu dipakai saat aplikasi dibuka lagi.
+      // Tanpa pemberitahuan, dan tanpa muat ulang mendadak yang bisa
+      // menghapus goresan yang sedang ditulis.
+      registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'icons/apple-touch-icon.png'],
       manifest: {
         name: 'NihonGo — Belajar Hiragana & Katakana',
@@ -37,6 +38,10 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,json,woff2,png,svg}'],
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         cleanupOutdatedCaches: true,
+        // Versi lama tetap dipakai selama aplikasi masih terbuka; versi baru
+        // mengambil alih setelah aplikasi ditutup dan dibuka kembali.
+        skipWaiting: false,
+        clientsClaim: false,
       },
       devOptions: { enabled: false },
     }),
