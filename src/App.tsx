@@ -1,6 +1,8 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppShell } from './components/AppShell'
 import Home from './pages/Home'
+import KanaDetail from './pages/KanaDetail'
+import KanaTable from './pages/KanaTable'
 import Placeholder from './pages/Placeholder'
 import WritePractice from './pages/WritePractice'
 
@@ -21,24 +23,9 @@ export default function App() {
           }
         />
 
-        <Route
-          path="/tabel"
-          element={
-            <Placeholder
-              title="Tabel kana"
-              description="Gojūon, dakuten, handakuten, huruf kecil, dan yōon dalam satu halaman."
-            />
-          }
-        />
-        <Route
-          path="/huruf/:script/:char"
-          element={
-            <Placeholder
-              title="Detail huruf"
-              description="Animasi urutan goresan, jumlah goresan, contoh kata, dan pintasan ke latihan menulis."
-            />
-          }
-        />
+        <Route path="/tabel" element={<Navigate to="/tabel/hiragana" replace />} />
+        <Route path="/tabel/:script" element={<KanaTable />} />
+        <Route path="/huruf/:script/:char" element={<KanaDetail />} />
 
         <Route path="/tulis" element={<Navigate to="/tulis/hiragana/あ" replace />} />
         <Route path="/tulis/:script" element={<WritePractice />} />
