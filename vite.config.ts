@@ -35,7 +35,7 @@ export default defineConfig({
       workbox: {
         // Seluruh aset ikut disimpan, termasuk data goresan KanjiVG (~250 KB)
         // dan berkas font, supaya aplikasi utuh saat dibuka tanpa internet.
-        globPatterns: ['**/*.{js,css,html,json,woff2,png,svg}'],
+        globPatterns: ['**/*.{js,css,html,json,woff2,png,svg,wav}'],
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         cleanupOutdatedCaches: true,
         // Versi lama tetap dipakai selama aplikasi masih terbuka; versi baru
