@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useReducer, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { speak, useJapaneseVoice } from '../audio/speak'
+import { speakKana } from '../audio/speak'
 import { getKana, type Kana, type KanaScript } from '../data/kana'
 import { getStrokes } from '../data/strokes'
 import {
@@ -77,7 +77,6 @@ function WriteQuestion({ kana, onDone }: WriteQuestionProps) {
 
 export default function Quiz() {
   const { progress, review } = useProgress()
-  const voice = useJapaneseVoice()
   const [script, setScript] = useState<KanaScript>('hiragana')
   const [questions, setQuestions] = useState<Question[]>([])
   const [index, setIndex] = useState(0)
@@ -88,7 +87,7 @@ export default function Quiz() {
     setQuestions(
       generateQuiz(poolFor(target), progress, new Date(), {
         length: DEFAULT_QUIZ_LENGTH,
-        allowAudio: voice.available,
+        allowAudio: true,
         allowWriting: true,
       }),
     )
@@ -97,19 +96,18 @@ export default function Quiz() {
     setPicked(null)
   }
 
-  // Sesi pertama menunggu hasil pengecekan suara, supaya soal dengar tidak
-  // terlanjur dibuat di perangkat yang tidak punya suara bahasa Jepang.
+  // Sesi pertama disusun sekali saat layar dibuka.
   useEffect(() => {
-    if (voice.checked && questions.length === 0) start(script)
+    if (questions.length === 0) start(script)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [voice.checked])
+  }, [])
 
   const question = questions[index]
   const done = questions.length > 0 && index >= questions.length
 
   // Soal dengar langsung dibunyikan begitu muncul.
   useEffect(() => {
-    if (question?.type === 'audio-kana') void speak(question.kana.char)
+    if (question?.type === 'audio-kana') void speakKana(question.kana.char, question.kana.romaji)
   }, [question])
 
   const answer = (value: string) => {
@@ -239,7 +237,7 @@ export default function Quiz() {
 
         <div className="quiz__stage">
           {question.type === 'audio-kana' && (
-            <button type="button" className="quiz__audio" onClick={() => void speak(question.kana.char)} aria-label="Putar bunyi">
+            <button type="button" className="quiz__audio" onClick={() => void speakKana(question.kana.char, question.kana.romaji)} aria-label="Putar bunyi">
               ♪
             </button>
           )}

@@ -12,6 +12,7 @@
  * kembali lewat peristiwa start/end/error, bukan diasumsikan berhasil.
  */
 import { useEffect, useState } from 'react'
+import { AUDIO_DIR, audioFileName, hasAudio } from './audioFiles'
 
 /** Daftar suara kadang masih kosong saat halaman baru dibuka. */
 const VOICE_WAIT_MS = 2000
@@ -64,6 +65,8 @@ export function findJapaneseVoice(voices: readonly SpeechSynthesisVoice[]): Spee
 
 export type SpeakOutcome =
   | { ok: true; voice: string }
+  /** Berkas audio bawaan aplikasi gagal diputar. */
+  | { ok: false; reason: 'blocked'; detail: string }
   /** Tidak ada suara Jepang di perangkat ini. */
   | { ok: false; reason: 'no-voice' }
   /** Peramban menolak, mis. butuh ketukan pengguna lebih dulu. */
@@ -147,7 +150,7 @@ export async function speak(text: string): Promise<SpeakOutcome> {
   for (let i = 0; i < attempts.length; i++) {
     const outcome = await speakWith(text, attempts[i])
     if (outcome.ok) return outcome
-    last = outcome.reason === 'no-voice' ? last : { ...outcome, tried: i + 1 }
+    if (outcome.reason === 'error' || outcome.reason === 'silent') last = { ...outcome, tried: i + 1 }
     synth.cancel()
   }
 
@@ -211,4 +214,38 @@ export function useJapaneseVoice(): JapaneseVoiceState {
   }, [])
 
   return state
+}
+
+/**
+ * Memutar rekaman bunyi kana yang disertakan di dalam aplikasi.
+ *
+ * Ini jalur utama: hasilnya sama di perangkat mana pun dan tidak bergantung
+ * mesin suara sistem, yang ternyata sering tidak terpasang lengkap.
+ */
+export async function playRecording(romaji: string): Promise<SpeakOutcome | null> {
+  if (!hasAudio(romaji)) return null
+  const url = import.meta.env.BASE_URL + AUDIO_DIR + audioFileName(romaji) + '.wav'
+
+  try {
+    const audio = new Audio(url)
+    audio.preload = 'auto'
+    await audio.play()
+    return { ok: true, voice: 'rekaman bawaan' }
+  } catch (error) {
+    const detail = error instanceof Error ? error.name : 'unknown'
+    return { ok: false, reason: 'blocked', detail }
+  }
+}
+
+/**
+ * Membunyikan sebuah kana: rekaman bawaan lebih dulu, mesin suara perangkat
+ * hanya dipakai bila rekamannya tidak ada atau gagal diputar.
+ */
+export async function speakKana(char: string, romaji: string): Promise<SpeakOutcome> {
+  const recorded = await playRecording(romaji)
+  if (recorded?.ok) return recorded
+
+  const spoken = await speak(char)
+  if (spoken.ok) return spoken
+  return recorded ?? spoken
 }

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useReducer, useState } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
-import { speak, useJapaneseVoice } from '../audio/speak'
+import { speakKana } from '../audio/speak'
 import { getKana, type Kana, type KanaScript } from '../data/kana'
 import { getStrokes } from '../data/strokes'
 import { useSettings } from '../state/settings'
@@ -65,7 +65,6 @@ export default function WritePractice() {
   const params = useParams()
   const navigate = useNavigate()
   const [settings] = useSettings()
-  const voice = useJapaneseVoice()
   const script: KanaScript = isScript(params.script) ? params.script : 'hiragana'
   const list = useMemo(() => writableKana(script), [script])
   const index = list.findIndex((kana) => kana.char === params.char)
@@ -192,11 +191,9 @@ export default function WritePractice() {
             <div className="kana-card__meta">
               {settings.showRomaji || hideAnswer ? <span className="kana-card__romaji">{kana.romaji}</span> : null}
               <span className="kana-card__strokes">{reference.length} goresan</span>
-              {voice.available && (
-                <button type="button" className="icon-button" onClick={() => void speak(kana.char)} aria-label="Dengarkan">
-                  🔊
-                </button>
-              )}
+              <button type="button" className="icon-button" onClick={() => void speakKana(kana.char, kana.romaji)} aria-label="Dengarkan">
+                ♪
+              </button>
             </div>
           </div>
 

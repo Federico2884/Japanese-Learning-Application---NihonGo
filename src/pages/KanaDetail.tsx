@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
-import { speak, useJapaneseVoice } from '../audio/speak'
+import { speakKana } from '../audio/speak'
 import { examplesFor } from '../data/examples'
 import { findKana, type KanaScript } from '../data/kana'
 import { getComponentStrokes, getStrokes } from '../data/strokes'
@@ -26,7 +26,6 @@ export default function KanaDetail() {
   const params = useParams()
   const [settings] = useSettings()
   const { progress } = useProgress()
-  const voice = useJapaneseVoice()
   const [replay, setReplay] = useState(0)
 
   const script = isScript(params.script) ? params.script : 'hiragana'
@@ -82,11 +81,9 @@ export default function KanaDetail() {
             <button type="button" onClick={() => setReplay((key) => key + 1)}>
               Putar ulang
             </button>
-            {voice.available && (
-              <button type="button" onClick={() => void speak(kana.char)}>
-                ♪ Dengar
-              </button>
-            )}
+            <button type="button" onClick={() => void speakKana(kana.char, kana.romaji)}>
+              ♪ Dengar
+            </button>
           </div>
         </div>
       </section>
